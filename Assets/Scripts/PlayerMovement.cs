@@ -25,23 +25,45 @@ public class PlayerMovement : MonoBehaviour {
     LayerMask whatCountsAsGround;
 
     private bool isOnGround;
+	private bool shouldJump = false;
+	private float horizontalInput;
 
+	private Vector2 jumpForce; 
 	// Use this for initialization
 	void Start ()
     {
         Debug.Log("Called from Start.");
 
         myRigidBody = GetComponent<Rigidbody2D>();
+		jumpForce = new Vector2 (0, jumpStrength);
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
+		GetMovementInput ();
+		GetJumpInput ();
         UpDateIsOnGround();
-        HandleMovement();
-        HandleJump();
-
     }
+
+	private void FixedUpdate()
+	{
+		HandleMovement ();
+		HandleJump();
+	}
+
+	private void GetMovementInput()
+	{
+		horizontalInput = Input.GetAxis("Horizontal");
+	}
+
+	private void GetJumpInput()
+	{
+		if (Input.GetButtonDown("Jump") && isOnGround)
+		{
+			shouldJump = true;
+		}
+	}
 
     private void UpDateIsOnGround()
     {
@@ -52,19 +74,21 @@ public class PlayerMovement : MonoBehaviour {
 
     private void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && isOnGround)
+		if (shouldJump)
         {
-            myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpStrength);
+            //myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpStrength);
+			myRigidBody.AddForce(jumpForce);
             isOnGround = false;
+			shouldJump = false;
         }
     }
 
     private void HandleMovement()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
 
         Debug.Log("Horizontal Input: " + horizontalInput);
 
         myRigidBody.velocity = new Vector2(horizontalInput * movementSpeed, myRigidBody.velocity.y);
+
     }
 }

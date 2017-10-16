@@ -795,7 +795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 8
-  jumpStrength: 10
+  jumpStrength: 100
   groundDetectPoint: {fileID: 1730881930}
   groundDetectRadius: 0.2
   whatCountsAsGround:
