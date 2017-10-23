@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -19,12 +20,22 @@ public class PlayerMovement : MonoBehaviour {
     Transform groundDetectPoint;
 
     [SerializeField]
+    Transform ceilingDetectPoint;
+
+    [SerializeField]
     float groundDetectRadius = .2f;
 
     [SerializeField]
     LayerMask whatCountsAsGround;
 
+    [SerializeField]
+    AudioSource audioSource;
+
+    [SerializeField]
+    Text coinCounter;
+
     private bool isOnGround;
+    private bool isOnCeiling;
 	private bool shouldJump = false;
 	private float horizontalInput;
 
@@ -33,7 +44,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Start ()
     {
         Debug.Log("Called from Start.");
-
+        audioSource = GetComponent<AudioSource>();
         myRigidBody = GetComponent<Rigidbody2D>();
 		jumpForce = new Vector2 (0, jumpStrength);
 	}
@@ -44,10 +55,12 @@ public class PlayerMovement : MonoBehaviour {
 		GetMovementInput ();
 		GetJumpInput ();
         UpDateIsOnGround();
+        UpDateIsOnCeiling();
     }
 
 	private void FixedUpdate()
 	{
+        coinCounter.text = "Coins: " + Coin.coinCount;
 		HandleMovement ();
 		HandleJump();
 	}
@@ -59,7 +72,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	private void GetJumpInput()
 	{
-		if (Input.GetButtonDown("Jump") && isOnGround)
+		if (Input.GetButtonDown("Jump") && (isOnGround || isOnCeiling))
 		{
 			shouldJump = true;
 		}
@@ -68,8 +81,14 @@ public class PlayerMovement : MonoBehaviour {
     private void UpDateIsOnGround()
     {
         Collider2D[] groundObjects = Physics2D.OverlapCircleAll(groundDetectPoint.position, groundDetectRadius, whatCountsAsGround);
-
         isOnGround = groundObjects.Length > 0;
+    }
+
+    private void UpDateIsOnCeiling()
+    {
+        Collider2D[] groundObjects = Physics2D.OverlapCircleAll(ceilingDetectPoint.position, groundDetectRadius, whatCountsAsGround);
+        isOnCeiling = groundObjects.Length > 0;
+
     }
 
     private void HandleJump()
@@ -77,8 +96,11 @@ public class PlayerMovement : MonoBehaviour {
 		if (shouldJump)
         {
             //myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpStrength);
-			myRigidBody.AddForce(jumpForce);
+            Physics2D.gravity = Physics2D.gravity * (-1);
+            audioSource.Play();
+			//myRigidBody.AddForce(jumpForce);
             isOnGround = false;
+            isOnCeiling = false;
 			shouldJump = false;
         }
     }
@@ -86,7 +108,7 @@ public class PlayerMovement : MonoBehaviour {
     private void HandleMovement()
     {
 
-        Debug.Log("Horizontal Input: " + horizontalInput);
+        // Debug.Log("Horizontal Input: " + horizontalInput);
 
         myRigidBody.velocity = new Vector2(horizontalInput * movementSpeed, myRigidBody.velocity.y);
 
