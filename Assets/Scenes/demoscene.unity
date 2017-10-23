@@ -408,6 +408,7 @@ GameObject:
   - component: {fileID: 1420580897}
   - component: {fileID: 1420580896}
   - component: {fileID: 1420580895}
+  - component: {fileID: 1420580900}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -485,6 +486,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1420580900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1420580894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c311f397c1df3ac4ea8ee35fd667b959, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraFollowSpeed: 5
+  objectToFollow: {fileID: 1998351254}
+  xOffSet: 0
+  yOffSet: -0.51
 --- !u!1 &1730881929
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,7 +811,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 8
-  jumpStrength: 100
+  jumpStrength: 500
   groundDetectPoint: {fileID: 1730881930}
   groundDetectRadius: 0.2
   whatCountsAsGround:
