@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour {
 
-    Vector3 Mover = new Vector3(0.1f,0,0);
+    //Vector3 Mover = new Vector3(0.1f,0,0);
 
     Rigidbody2D myRigidBody;
 
@@ -40,10 +40,13 @@ public class PlayerMovement : MonoBehaviour {
 	private float horizontalInput;
 
 	private Vector2 jumpForce; 
+
+
 	// Use this for initialization
 	void Start ()
     {
         Debug.Log("Called from Start.");
+        //shouldJump = true;
         audioSource = GetComponent<AudioSource>();
         myRigidBody = GetComponent<Rigidbody2D>();
 		jumpForce = new Vector2 (0, jumpStrength);
@@ -63,6 +66,10 @@ public class PlayerMovement : MonoBehaviour {
         coinCounter.text = "Coins: " + Coin.coinCount;
 		HandleMovement ();
 		HandleJump();
+
+        //debugging
+        //Debug.Log(isOnGround);
+        //Debug.Log(isOnCeiling);
 	}
 
 	private void GetMovementInput()
@@ -82,12 +89,20 @@ public class PlayerMovement : MonoBehaviour {
     {
         Collider2D[] groundObjects = Physics2D.OverlapCircleAll(groundDetectPoint.position, groundDetectRadius, whatCountsAsGround);
         isOnGround = groundObjects.Length > 0;
+
+        //debugging
+       // if (isOnGround)
+            //Debug.Log("Should Jump");
     }
 
     private void UpDateIsOnCeiling()
     {
         Collider2D[] groundObjects = Physics2D.OverlapCircleAll(ceilingDetectPoint.position, groundDetectRadius, whatCountsAsGround);
         isOnCeiling = groundObjects.Length > 0;
+
+        //debugging
+        //if (isOnCeiling)
+           // Debug.Log("Should Jump");
 
     }
 
