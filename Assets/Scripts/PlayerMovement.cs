@@ -65,6 +65,11 @@ public class PlayerMovement : MonoBehaviour {
         GetJumpInput();
         UpDateIsOnGround();
         UpDateIsOnCeiling();
+        if (Input.GetButtonDown("Reset"))
+        {
+            transform.position =
+                Checkpoint.currentlyActivatedCheckpoint.transform.position;
+        }
     }
 
     private void FixedUpdate()
@@ -115,6 +120,7 @@ public class PlayerMovement : MonoBehaviour {
     {
         Collider2D[] groundObjects = Physics2D.OverlapCircleAll(groundDetectPoint.position, groundDetectRadius, whatCountsAsGround);
         isOnGround = groundObjects.Length > 0;
+        
 
         //debugging
        // if (isOnGround)
@@ -134,6 +140,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private void HandleJump()
     {
+        
+
 		if (shouldJump)
         {
             //myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpStrength);
@@ -160,4 +168,15 @@ public class PlayerMovement : MonoBehaviour {
             HorizontalFlip();
 
     }
+
+    /*
+    public void CheckReset()
+    {
+        if(Input.GetKeyDown("KeyCode.R"))
+        {
+            transform.position =
+                Checkpoint.currentlyActivatedCheckpoint.transform.position;
+        }
+    }
+    */
 }
